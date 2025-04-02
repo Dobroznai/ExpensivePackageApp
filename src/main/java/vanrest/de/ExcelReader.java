@@ -1,0 +1,54 @@
+package vanrest.de;
+
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
+public class ExcelReader {
+    private List<Parcel> parcels = new ArrayList<>();
+    private String filePath;
+
+    public List<Parcel> readExcel(String filePath) {
+        try (InputStream stream = Files.newInputStream(Path.of(filePath));
+             Workbook workbook = new XSSFWorkbook(stream)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+
+            for (Row row : sheet) {
+                String trackingNumber = getCellAsString(row, 0);
+                String tourNumber = getCellAsString(row, 1);
+                String gibitNumber = getCellAsString(row, 2);
+
+                if (trackingNumber.isEmpty() || tourNumber.isEmpty() || gibitNumber.isEmpty())
+                    continue;
+
+                Parcel parcel = new Parcel(trackingNumber, tourNumber, gibitNumber);
+                parcels.add(parcel);
+            }
+        } catch (IOException e) {
+            //TODO
+            log.error(e.getMessage());
+        }
+        return parcels;
+    }
+
+    private String getCellAsString(Row row, int cellIndex) {
+        Cell cell = row.getCell(cellIndex);
+        return switch (cell.getCellType()) {
+            case STRING -> cell.getStringCellValue();
+            case NUMERIC -> String.valueOf((long) cell.getNumericCellValue());
+            default -> "";
+        };
+    }
+}

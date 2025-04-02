@@ -16,10 +16,10 @@ import java.util.List;
 
 @Slf4j
 public class ExcelReader {
-    private List<Parcel> parcels = new ArrayList<>();
-    private String filePath;
 
     public List<Parcel> readExcel(String filePath) {
+        List<Parcel> parcels = new ArrayList<>();
+
         try (InputStream stream = Files.newInputStream(Path.of(filePath));
              Workbook workbook = new XSSFWorkbook(stream)) {
 
@@ -37,7 +37,7 @@ public class ExcelReader {
                 parcels.add(parcel);
             }
         } catch (IOException e) {
-            //TODO
+            System.out.println("Помилка читання файлу: " + e.getMessage());
             log.error(e.getMessage());
         }
         return parcels;

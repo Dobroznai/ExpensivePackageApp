@@ -27,13 +27,13 @@ public class ExcelReader {
 
             for (Row row : sheet) {
                 String trackingNumber = getCellAsString(row, 0);
-                String tourNumber = getCellAsString(row, 1);
-                String gibitNumber = getCellAsString(row, 2);
+                String gibitNumber = getCellAsString(row, 1);
+                String tourNumber = getCellAsString(row, 2);
 
-                if (trackingNumber.isEmpty() || tourNumber.isEmpty() || gibitNumber.isEmpty())
+                if (trackingNumber.isEmpty() || gibitNumber.isEmpty() || tourNumber.isEmpty())
                     continue;
 
-                Parcel parcel = new Parcel(trackingNumber, tourNumber, gibitNumber);
+                Parcel parcel = new Parcel(trackingNumber, gibitNumber, tourNumber);
                 parcels.add(parcel);
             }
         } catch (IOException e) {

@@ -4,14 +4,15 @@ public class Parcel {
     private static int nextId = 1;
     private final int idParcel;
     private final String trackingNumber;
-    private final String  tourNumber;
     private final String gibitNumber;
+    private final String tourNumber;
 
-    public Parcel(String trackingNumber, String tourNumber, String gibitNumber) {
+
+    public Parcel(String trackingNumber, String gibitNumber, String tourNumber) {
         this.idParcel = nextId++;
         this.trackingNumber = trackingNumber;
-        this.tourNumber = tourNumber;
         this.gibitNumber = gibitNumber;
+        this.tourNumber = tourNumber;
     }
 
     @Override
@@ -19,8 +20,8 @@ public class Parcel {
         return "Parcel{" +
                 "idParcel=" + idParcel +
                 ", trackingNumber='" + trackingNumber + '\'' +
-                ", tourNumber='" + tourNumber + '\'' +
                 ", gibitNumber='" + gibitNumber + '\'' +
+                ", tourNumber='" + tourNumber + '\'' +
                 '}';
     }
 }

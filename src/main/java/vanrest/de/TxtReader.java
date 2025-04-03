@@ -11,14 +11,14 @@ import java.util.List;
 @Slf4j
 public class TxtReader {
 
-    public List<Parcel> readTxt(String filePath) {
+    public List<Parcel> read(String filePath) {
         List<Parcel> parcels = new ArrayList<>();
 
         try {
             List<String> lines = Files.readAllLines(Path.of(filePath));
 
             for (String line : lines) {
-                String[] parts = line.split(" - ");
+                String[] parts = line.split("\\s+");
 
                 if (parts.length != 3)
                     continue;

@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class ExcelReader {
 
-    public List<Parcel> readExcel(String filePath) {
+    public List<Parcel> read(String filePath) {
         List<Parcel> parcels = new ArrayList<>();
 
         try (InputStream stream = Files.newInputStream(Path.of(filePath));

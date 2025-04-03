@@ -1,6 +1,7 @@
-package vanrest.de;
+package vanrest.de.readers;
 
 import lombok.extern.slf4j.Slf4j;
+import vanrest.de.Parcel;
 
 import java.io.IOException;
 import java.nio.file.Files;

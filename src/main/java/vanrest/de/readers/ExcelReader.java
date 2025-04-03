@@ -1,4 +1,4 @@
-package vanrest.de;
+package vanrest.de.readers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import vanrest.de.Parcel;
 
 import java.io.IOException;
 import java.io.InputStream;

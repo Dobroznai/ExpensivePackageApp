@@ -1,7 +1,7 @@
-package vanrest.de.readers;
+package vanrest.de;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import vanrest.de.Parcel;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Getter
 public class TxtReader {
 
     public List<Parcel> read(String filePath) {

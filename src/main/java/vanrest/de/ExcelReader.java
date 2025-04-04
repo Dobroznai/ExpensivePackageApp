@@ -1,12 +1,12 @@
-package vanrest.de.readers;
+package vanrest.de;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import vanrest.de.Parcel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,13 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Getter
 public class ExcelReader {
 
     public List<Parcel> read(String filePath) {
         List<Parcel> parcels = new ArrayList<>();
 
-        try (InputStream stream = Files.newInputStream(Path.of(filePath));
-             Workbook workbook = new XSSFWorkbook(stream)) {
+        try (InputStream inStream = Files.newInputStream(Path.of(filePath));
+             Workbook workbook = new XSSFWorkbook(inStream)) {
 
             Sheet sheet = workbook.getSheetAt(0);
 

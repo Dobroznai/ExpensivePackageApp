@@ -1,5 +1,8 @@
 package vanrest.de;
 
+import lombok.Getter;
+
+@Getter
 public class Parcel {
     private static int nextId = 1;
     private final int idParcel;

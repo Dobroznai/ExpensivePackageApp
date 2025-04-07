@@ -30,11 +30,14 @@ public class TxtReader {
                 String tourNumber = parts[2];
 
                 Parcel parcel = new Parcel(trackingNumber, gibitNumber, tourNumber);
-                parcels.add(parcel);
+                if (!parcels.contains(parcel))
+                    parcels.add(parcel);
+                else
+                    log.warn("Duplicate - {}", parcel);
             }
 
         } catch (IOException e) {
-            System.out.println("Помилка читання файлу: " + e.getMessage());
+            System.out.println("File reading error: " + e.getMessage());
             log.error(e.getMessage());
         }
         return parcels;

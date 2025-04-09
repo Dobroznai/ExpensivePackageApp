@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="688.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.vanrest.controller.Controller">
+   <children>
+      <TableView fx:id="inputParcelsTable1" layoutX="14.0" layoutY="176.0" prefHeight="498.0" prefWidth="472.0">
+        <columns>
+          <TableColumn fx:id="idColumn1" prefWidth="50.0" text="№" />
+          <TableColumn fx:id="trackingNumberColumn1" prefWidth="186.0" text="Tracking Number" />
+            <TableColumn fx:id="gibitNumberColumn1" prefWidth="115.0" text="Gibit Number" />
+            <TableColumn fx:id="tourNumberColumn1" prefWidth="120.0" text="TourNumber" />
+        </columns>
+      </TableView>
+      <TableView fx:id="scannedParcelsTable2" layoutX="506.0" layoutY="176.0" prefHeight="498.0" prefWidth="472.0">
+         <columns>
+            <TableColumn fx:id="idColumn2" prefWidth="50.0" text="№" />
+            <TableColumn fx:id="trackingNumberColumn2" prefWidth="186.0" text="Tracking Number" />
+            <TableColumn fx:id="gibitNumberColumn2" prefWidth="115.0" text="Gibit Number" />
+            <TableColumn fx:id="tourNumberColumn2" prefWidth="120.0" text="TourNumber" />
+         </columns>
+      </TableView>
+      <Text fx:id="inputText1" layoutX="658.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scanned parcels" textAlignment="CENTER" wrappingWidth="167.13671875">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="scannedText2" layoutX="178.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Input parcels" textAlignment="CENTER" wrappingWidth="143.13671875">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</AnchorPane>

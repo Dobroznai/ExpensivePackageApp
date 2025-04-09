@@ -2,19 +2,19 @@ package de.vanrest;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 public class ParcelAssistantApp extends Application{
 
-    private static final Logger log = LoggerFactory.getLogger(ParcelAssistantApp.class);
-
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Parcels.fxml"));
-        stage.setScene(new Scene(loader.load(), 992, 700));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/ParcelsView.fxml")));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
         stage.setTitle("Parcel Assistant (ver. 1.0)");
         stage.show();
     }
@@ -23,7 +23,9 @@ public class ParcelAssistantApp extends Application{
         launch(args);
     }
 
-//    public static void main(String[] args) {
+
+//    private static final Logger log = LoggerFactory.getLogger(ParcelAssistantApp.class);
+//
 //        String filePath = "D:\\programming\\Parcels.txt";
 //        List<Parcel> parcels = getParcels(filePath);
 //
@@ -33,7 +35,7 @@ public class ParcelAssistantApp extends Application{
 //        BarcodeScanner barcodeScanner = new BarcodeScanner(parcels);
 //        Thread scannerThread = new Thread(barcodeScanner);
 //        scannerThread.start();
-//    }
+//
 //
 //    public static List<Parcel> getParcels(String filePath) {
 //        if (filePath.endsWith(".txt")) {

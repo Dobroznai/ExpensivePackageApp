@@ -16,9 +16,10 @@ public class Parcel {
         this.tourNumber = tourNumber;
     }
 
-    public String getTrackingNumber() {
-        return trackingNumber;
-    }
+    public int getIdParcel() {return idParcel;}
+    public String getTrackingNumber() {return trackingNumber;}
+    public String getGibitNumber() {return gibitNumber;}
+    public String getTourNumber() {return tourNumber;}
 
     @Override
     public String toString() {

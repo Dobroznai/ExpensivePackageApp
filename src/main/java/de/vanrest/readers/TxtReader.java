@@ -1,7 +1,8 @@
-package vanrest.de;
+package de.vanrest.readers;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import de.vanrest.model.Parcel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,9 +10,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
-@Getter
 public class TxtReader {
+
+    private static final Logger log = LoggerFactory.getLogger(TxtReader.class);
 
     public List<Parcel> read(String filePath) {
         List<Parcel> parcels = new ArrayList<>();

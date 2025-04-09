@@ -1,12 +1,13 @@
-package vanrest.de;
+package de.vanrest.readers;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import de.vanrest.model.Parcel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,9 +16,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
-@Getter
 public class ExcelReader {
+
+    private static final Logger log = LoggerFactory.getLogger(ExcelReader.class);
 
     public List<Parcel> read(String filePath) {
         List<Parcel> parcels = new ArrayList<>();
@@ -50,6 +51,7 @@ public class ExcelReader {
 
     private String getCellAsString(Row row, int cellIndex) {
         Cell cell = row.getCell(cellIndex);
+        if (cell == null) return "";
         return switch (cell.getCellType()) {
             case STRING -> cell.getStringCellValue();
             case NUMERIC -> String.valueOf((long) cell.getNumericCellValue());

@@ -1,17 +1,17 @@
-package vanrest.de;
+package de.vanrest.readers;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import de.vanrest.model.Parcel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-@Slf4j
-@Getter
 public class BarcodeScanner implements Runnable {
 
+    private static final Logger log = LoggerFactory.getLogger(BarcodeScanner.class);
     private List<Parcel> parcels;
     private List<Parcel> scannedParcels;
 
@@ -32,9 +32,7 @@ public class BarcodeScanner implements Runnable {
     }
 
     private void addParcel(String scannedLine) {
-        Optional<Parcel> parcelOpt = parcels.stream()
-                .filter(p -> p.getTrackingNumber().equalsIgnoreCase(scannedLine))
-                .findFirst();
+        Optional<Parcel> parcelOpt = findParcel(parcels, scannedLine);
         if (parcelOpt.isPresent()) {
             Parcel parcel = parcelOpt.get();
             scannedParcels.add(parcel);
@@ -42,9 +40,7 @@ public class BarcodeScanner implements Runnable {
             parcels.remove(parcel);
             scannedParcels.forEach(System.out::println);  //для видалення
         } else {
-            Optional<Parcel> parcelOpt2 = scannedParcels.stream()
-                    .filter(p -> p.getTrackingNumber().equalsIgnoreCase(scannedLine))
-                    .findFirst();
+            Optional<Parcel> parcelOpt2 = findParcel(scannedParcels, scannedLine);
             if (parcelOpt2.isPresent()) {
                 System.out.println("The parcel has already been scanned!");
                 log.info("The parcel has already been scanned! {}", parcelOpt2.get());
@@ -53,5 +49,11 @@ public class BarcodeScanner implements Runnable {
                 log.warn("Parcel not found {}", scannedLine);
             }
         }
+    }
+
+    private Optional<Parcel> findParcel(List<Parcel> parcels, String trackingNumber) {
+        return parcels.stream()
+                .filter(parcel -> parcel.getTrackingNumber().equalsIgnoreCase(trackingNumber))
+                .findFirst();
     }
 }

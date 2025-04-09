@@ -1,0 +1,13 @@
+module de.vanrest.parcelassistant {
+    requires javafx.controls;
+    requires javafx.fxml;
+
+    requires org.slf4j;
+    requires ch.qos.logback.classic;
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
+
+    opens de.vanrest.controller to javafx.fxml;
+    exports de.vanrest;
+    exports de.vanrest.model;
+}

@@ -1,10 +1,6 @@
-package vanrest.de;
+package de.vanrest.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
-@Getter
-@EqualsAndHashCode(of = {"trackingNumber"})
+import java.util.Objects;
 
 public class Parcel {
     private static int nextId = 1;
@@ -20,6 +16,10 @@ public class Parcel {
         this.tourNumber = tourNumber;
     }
 
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Parcel{");
@@ -29,5 +29,18 @@ public class Parcel {
         sb.append(", tourNumber='").append(tourNumber).append('\'');
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Parcel parcel = (Parcel) o;
+        return Objects.equals(trackingNumber, parcel.trackingNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(trackingNumber);
     }
 }

@@ -12,12 +12,13 @@ import java.util.Scanner;
 public class BarcodeScanner implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(BarcodeScanner.class);
+
     private List<Parcel> parcels;
     private List<Parcel> scannedParcels;
 
-    public BarcodeScanner(List<Parcel> parcels) {
+    public BarcodeScanner(List<Parcel> parcels, List<Parcel> scannedParcels) {
         this.parcels = parcels;
-        scannedParcels = new ArrayList<>();
+        this.scannedParcels = scannedParcels;
     }
 
     @Override
@@ -38,7 +39,6 @@ public class BarcodeScanner implements Runnable {
             scannedParcels.add(parcel);
             log.info("The parcel scanned - {}", parcel);
             parcels.remove(parcel);
-            scannedParcels.forEach(System.out::println);  //для видалення
         } else {
             Optional<Parcel> parcelOpt2 = findParcel(scannedParcels, scannedLine);
             if (parcelOpt2.isPresent()) {

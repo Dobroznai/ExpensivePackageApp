@@ -10,9 +10,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TxtReader {
+public class TXTReader {
 
-    private static final Logger log = LoggerFactory.getLogger(TxtReader.class);
+    private static final Logger log = LoggerFactory.getLogger(TXTReader.class);
 
     public List<Parcel> read(String filePath) {
         List<Parcel> parcels = new ArrayList<>();

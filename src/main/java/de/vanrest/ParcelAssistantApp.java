@@ -13,9 +13,8 @@ public class ParcelAssistantApp extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ParcelsView.fxml")));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/RootView.fxml")));
+        stage.setScene(new Scene(root));
         stage.setTitle("Parcel Assistant (ver. 1.0)");
         Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image.png")));
         stage.getIcons().add(icon);
@@ -25,16 +24,4 @@ public class ParcelAssistantApp extends Application{
     public static void main(String[] args) {
         launch(args);
     }
-
-//    public static List<Parcel> getParcels(String filePath) {
-//        if (filePath.endsWith(".txt")) {
-//            return new TxtReader().read(filePath);
-//        } else if (filePath.endsWith(".xlsx")) {
-//            return new ExcelReader().read(filePath);
-//        } else {
-//            System.out.println("File format is not supported");
-//            log.error("Input path - {}", filePath);
-//            return null;
-//        }
-//    }
 }

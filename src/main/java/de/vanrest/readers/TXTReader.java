@@ -1,6 +1,6 @@
 package de.vanrest.readers;
 
-import de.vanrest.model.Parcel;
+import de.vanrest.models.Parcel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

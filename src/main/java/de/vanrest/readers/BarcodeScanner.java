@@ -1,10 +1,10 @@
 package de.vanrest.readers;
 
-import de.vanrest.model.Parcel;
+import de.vanrest.utils.Listener;
+import de.vanrest.models.Parcel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -13,6 +13,7 @@ public class BarcodeScanner implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(BarcodeScanner.class);
 
+    private Listener listener;
     private List<Parcel> parcels;
     private List<Parcel> scannedParcels;
 
@@ -20,6 +21,8 @@ public class BarcodeScanner implements Runnable {
         this.parcels = parcels;
         this.scannedParcels = scannedParcels;
     }
+
+    public void setListener(Listener listener) {this.listener = listener;}
 
     @Override
     public void run() {
@@ -37,6 +40,7 @@ public class BarcodeScanner implements Runnable {
         if (parcelOpt.isPresent()) {
             Parcel parcel = parcelOpt.get();
             scannedParcels.add(parcel);
+            listener.onParcelScanned(parcel);
             log.info("The parcel scanned - {}", parcel);
             parcels.remove(parcel);
         } else {

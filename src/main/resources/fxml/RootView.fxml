@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="688.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.vanrest.controller.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="688.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.vanrest.controllers.RootController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e9ffca" height="31.0" layoutX="506.0" layoutY="146.0" stroke="#bcbcbc" strokeType="INSIDE" width="472.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#def1ff" height="31.0" layoutX="14.0" layoutY="146.0" stroke="#bcbcbc" strokeType="INSIDE" width="472.0" />
@@ -19,43 +19,50 @@
           <TableColumn fx:id="idColumn1" prefWidth="50.0" text="№" />
           <TableColumn fx:id="trackingNumberColumn1" prefWidth="186.0" text="Tracking Number" />
             <TableColumn fx:id="gibitNumberColumn1" prefWidth="122.0" text="Gibit Number" />
-            <TableColumn fx:id="tourNumberColumn1" prefWidth="112.0" text="TourNumber" />
+            <TableColumn fx:id="tourNumberColumn1" prefWidth="112.0" text="Tour Number" />
         </columns>
       </TableView>
       <TableView fx:id="scannedParcelsTable2" layoutX="506.0" layoutY="176.0" prefHeight="498.0" prefWidth="472.0">
          <columns>
             <TableColumn fx:id="idColumn2" prefWidth="50.0" text="№" />
             <TableColumn fx:id="trackingNumberColumn2" prefWidth="186.0" text="Tracking Number" />
-            <TableColumn fx:id="gibitNumberColumn2" prefWidth="129.0" text="Gibit Number" />
-            <TableColumn fx:id="tourNumberColumn2" prefWidth="105.0" text="TourNumber" />
+            <TableColumn fx:id="gibitNumberColumn2" prefWidth="121.0" text="Gibit Number" />
+            <TableColumn fx:id="tourNumberColumn2" prefWidth="113.0" text="Tour Number" />
          </columns>
       </TableView>
-      <Text id="inputText1" fx:id="inputText1" layoutX="14.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Input parcels" textAlignment="CENTER" wrappingWidth="472.0">
+      <Text id="inputText1" fx:id="inputText1" layoutX="14.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Input Parcels" textAlignment="CENTER" wrappingWidth="472.0">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text id="scannedText2" fx:id="scannedText2" layoutX="506.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scanned parcels" textAlignment="CENTER" wrappingWidth="472.0">
+      <Text id="scannedText2" fx:id="scannedText2" layoutX="506.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scanned Parcels" textAlignment="CENTER" wrappingWidth="472.0">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Button fx:id="loadTxtFileBtn" mnemonicParsing="false" onAction="#onTxtFileBtnClicked" prefHeight="25.0" prefWidth="112.0" text="Upload TXT" textAlignment="CENTER">
+      <Button fx:id="uploadFile" mnemonicParsing="false" onAction="#onUploadFileBtnClicked"
+              prefHeight="31.0" prefWidth="126.0" text="Upload File" textAlignment="CENTER">
          <font>
-            <Font name="System Bold" size="12.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="loadExcelFileBtn" layoutX="111.0" mnemonicParsing="false" onAction="#onExcelFileBtnClicked" prefHeight="25.0" prefWidth="112.0" text="Upload Excel" textAlignment="CENTER">
+      <Button fx:id="saveList" layoutX="125.0" mnemonicParsing="false" onAction="#onSaveBtnClicked"
+              prefHeight="31.0" prefWidth="126.0" text="Save" textAlignment="CENTER">
          <font>
-            <Font name="System Bold" size="12.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <TextField fx:id="newParcel" layoutX="204.0" layoutY="58.0" prefHeight="52.0" prefWidth="584.0">
+      <Button fx:id="clearLists" layoutX="250.0" mnemonicParsing="false" onAction="#onUploadFileBtnClicked" prefHeight="31.0" prefWidth="126.0" text="Сlear Lists" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <TextField fx:id="newParcelField" layoutX="260.0" layoutY="63.0" prefHeight="52.0" prefWidth="472.0">
          <font>
             <Font size="24.0" />
          </font>
       </TextField>
-      <Button fx:id="getData" layoutX="793.0" layoutY="58.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="52.0" text="Add">
+      <Button fx:id="addNewParcel" layoutX="753.0" layoutY="63.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="52.0" text="Add">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

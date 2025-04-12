@@ -1,6 +1,6 @@
 package de.vanrest.readers;
 
-import de.vanrest.model.Parcel;
+import de.vanrest.models.Parcel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;

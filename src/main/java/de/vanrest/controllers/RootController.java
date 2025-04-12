@@ -1,9 +1,10 @@
-package de.vanrest.controller;
+package de.vanrest.controllers;
 
-import de.vanrest.model.Parcel;
+import de.vanrest.models.Parcel;
 import de.vanrest.readers.BarcodeScanner;
 import de.vanrest.readers.ExcelReader;
 import de.vanrest.readers.TXTReader;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,21 +13,22 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
-public class Controller {
+public class RootController {
 
-    private static final Logger log = LoggerFactory.getLogger(Controller.class);
+    private static final Logger log = LoggerFactory.getLogger(RootController.class);
     private final ObservableList<Parcel> inputList = FXCollections.observableArrayList();
     private final ObservableList<Parcel> scannedList = FXCollections.observableArrayList();
+    BarcodeScanner barcodeScanner;
 
     @FXML private TableView<Parcel> inputParcelsTable1;
     @FXML private TableColumn<Parcel, Integer> idColumn1;
@@ -40,16 +42,20 @@ public class Controller {
     @FXML private TableColumn<Parcel, String> gibitNumberColumn2;
     @FXML private TableColumn<Parcel, String> tourNumberColumn2;
 
-    @FXML private TextField newParcel;
-    @FXML private Button getData;
+    @FXML private TextField newParcelField;
+    @FXML private Button addNewParcel;
+    @FXML private Button clearLists;
 
     @FXML public void initialize() {
-        BarcodeScanner barcodeScanner = new BarcodeScanner(inputList, scannedList);
+        barcodeScanner = new BarcodeScanner(inputList, scannedList);
         Thread scannerThread = new Thread(barcodeScanner);
         scannerThread.start();
 
-        getData.setOnAction(event -> {
-            String getUserParcel = newParcel.getText().trim();
+        barcodeScanner.setListener(parcel ->
+            Platform.runLater(() -> TourNumberController.show(parcel.getTourNumber())));
+
+        addNewParcel.setOnAction(event -> {
+            String getUserParcel = newParcelField.getText().trim();
             String[] parts = getUserParcel.split("\\s+");
             if (parts.length == 3) {
                 Parcel parcel = new Parcel(parts[0], parts[1], parts[2]);
@@ -58,6 +64,11 @@ public class Controller {
                 else
                     log.warn("Duplicate - {}", parcel);
             }
+        });
+
+        clearLists.setOnAction(event -> {
+            inputList.clear();
+            scannedList.clear();
         });
 
         idColumn1.setCellValueFactory(new PropertyValueFactory<>("idParcel"));
@@ -73,27 +84,38 @@ public class Controller {
         scannedParcelsTable2.setItems(scannedList);
     }
 
-    @FXML private void onTxtFileBtnClicked() {
+    @FXML private void onUploadFileBtnClicked() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TXT Files", "*.txt"));
-        File file = fileChooser.showOpenDialog(null);
-
-        if (file != null) {
-            TXTReader txtReader = new TXTReader();
-            List<Parcel> inputParcels = txtReader.read(file.getPath());
-            inputList.addAll(inputParcels);
-        }
-    }
-
-    @FXML private void onExcelFileBtnClicked() {
-        FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
-            ExcelReader excelReader = new ExcelReader();
-            List<Parcel> inputParcels = excelReader.read(file.getPath());
-            inputList.addAll(inputParcels);
+            if (file.getName().endsWith(".txt")) {
+                TXTReader txtReader = new TXTReader();
+                List<Parcel> inputParcels = txtReader.read(file.getPath());
+                inputList.addAll(inputParcels);
+            } else if (file.getName().endsWith(".xlsx")) {
+                ExcelReader excelReader = new ExcelReader();
+                List<Parcel> inputParcels = excelReader.read(file.getPath());
+                inputList.addAll(inputParcels);
+            }
+        }
+    }
+
+    @FXML private void onSaveBtnClicked() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TXT Files", "*.txt"));
+        fileChooser.setInitialFileName("scanned_parcels.txt");
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+                for (Parcel parcel : scannedList) {
+                    writer.write(parcel.getTrackingNumber() + "    " + parcel.getGibitNumber() + "    " + parcel.getTourNumber() + System.lineSeparator());
+                }
+            } catch (IOException e) {
+                log.error("Error saving file {}", e.getMessage());
+            }
         }
     }
 }

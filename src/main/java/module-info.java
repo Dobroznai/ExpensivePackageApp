@@ -7,7 +7,8 @@ module de.vanrest.parcelassistant {
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
 
-    opens de.vanrest.controller to javafx.fxml;
+    opens de.vanrest.controllers to javafx.fxml;
     exports de.vanrest;
-    exports de.vanrest.model;
+    exports de.vanrest.models;
+    opens de.vanrest.utils to javafx.fxml;
 }

@@ -1,4 +1,4 @@
-package de.vanrest.model;
+package de.vanrest.models;
 
 import java.util.Objects;
 

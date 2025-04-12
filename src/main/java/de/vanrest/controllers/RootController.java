@@ -111,7 +111,8 @@ public class RootController {
         if (file != null) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
                 for (Parcel parcel : scannedList) {
-                    writer.write(parcel.getTrackingNumber() + "    " + parcel.getGibitNumber() + "    " + parcel.getTourNumber() + System.lineSeparator());
+                    writer.write(parcel.getTrackingNumber() + "    " + parcel.getGibitNumber() + "    " +
+                                        parcel.getTourNumber() + System.lineSeparator());
                 }
             } catch (IOException e) {
                 log.error("Error saving file {}", e.getMessage());

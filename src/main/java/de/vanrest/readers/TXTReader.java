@@ -28,17 +28,16 @@ public class TXTReader {
 
                 String trackingNumber = parts[0];
                 String gibitNumber = parts[1];
+                if (gibitNumber.length() != 5)
+                    continue;
                 String tourNumber = parts[2];
+                if (tourNumber.length() != 3)
+                    continue;
 
                 Parcel parcel = new Parcel(trackingNumber, gibitNumber, tourNumber);
-                if (!parcels.contains(parcel))
                     parcels.add(parcel);
-                else
-                    log.warn("Duplicate - {}", parcel);
             }
-
         } catch (IOException e) {
-            System.out.println("File reading error: " + e.getMessage());
             log.error(e.getMessage());
         }
         return parcels;

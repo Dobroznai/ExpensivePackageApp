@@ -41,15 +41,13 @@ public class BarcodeScanner implements Runnable {
             Parcel parcel = parcelOpt.get();
             scannedParcels.add(parcel);
             listener.onParcelScanned(parcel);
-            log.info("The parcel scanned - {}", parcel);
+            log.info("The parcel scanned - {}", parcel.getTrackingNumber());
             parcels.remove(parcel);
         } else {
             Optional<Parcel> parcelOpt2 = findParcel(scannedParcels, scannedLine);
             if (parcelOpt2.isPresent()) {
-                System.out.println("The parcel has already been scanned!");
-                log.info("The parcel has already been scanned! {}", parcelOpt2.get());
+                log.info("The parcel has already been scanned - {}", parcelOpt2.get().getTrackingNumber());
             } else {
-                System.out.println("Parcel not found");
                 log.warn("Parcel not found {}", scannedLine);
             }
         }

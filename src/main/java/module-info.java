@@ -6,6 +6,7 @@ module de.vanrest.parcelassistant {
     requires ch.qos.logback.classic;
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
+    requires java.desktop;
 
     opens de.vanrest.controllers to javafx.fxml;
     exports de.vanrest;

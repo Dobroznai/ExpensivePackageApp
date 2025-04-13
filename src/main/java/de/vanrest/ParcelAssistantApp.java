@@ -16,8 +16,9 @@ public class ParcelAssistantApp extends Application{
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/RootView.fxml")));
         stage.setScene(new Scene(root));
         stage.setTitle("Parcel Assistant (ver. 1.0)");
-        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image.png")));
+        Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/icon.png")));
         stage.getIcons().add(icon);
+        stage.setResizable(false);
         stage.show();
     }
 

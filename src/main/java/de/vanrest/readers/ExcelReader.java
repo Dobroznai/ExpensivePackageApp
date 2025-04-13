@@ -30,20 +30,19 @@ public class ExcelReader {
 
             for (Row row : sheet) {
                 String trackingNumber = getCellAsString(row, 0);
+                if (trackingNumber.isEmpty())
+                    continue;
                 String gibitNumber = getCellAsString(row, 1);
+                if (gibitNumber.length() != 5)
+                    continue;
                 String tourNumber = getCellAsString(row, 2);
-
-                if (trackingNumber.isEmpty() || gibitNumber.isEmpty() || tourNumber.isEmpty())
+                if (tourNumber.length() != 3)
                     continue;
 
                 Parcel parcel = new Parcel(trackingNumber, gibitNumber, tourNumber);
-                if (!parcels.contains(parcel))
-                    parcels.add(parcel);
-                else
-                    log.warn("Duplicate - {}", parcel);
+                parcels.add(parcel);
             }
         } catch (IOException e) {
-            System.out.println("File reading error: " + e.getMessage());
             log.error(e.getMessage());
         }
         return parcels;

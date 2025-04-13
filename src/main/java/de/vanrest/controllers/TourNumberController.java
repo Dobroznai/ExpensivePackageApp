@@ -40,7 +40,7 @@ public class TourNumberController {
             dialodStage.setScene(new Scene(root));
             dialodStage.setResizable(false);
 
-            Image icon = new Image(Objects.requireNonNull(TourNumberController.class.getResourceAsStream("/image.png")));
+            Image icon = new Image(Objects.requireNonNull(TourNumberController.class.getResourceAsStream("/images/icon.png")));
             dialodStage.getIcons().add(icon);
 
             dialodStage.setOnHidden(event -> {

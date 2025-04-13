@@ -5,15 +5,21 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="688.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.vanrest.controllers.RootController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="688.0" prefWidth="992.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.vanrest.controllers.RootController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e9ffca" height="31.0" layoutX="506.0" layoutY="146.0" stroke="#bcbcbc" strokeType="INSIDE" width="472.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#def1ff" height="31.0" layoutX="14.0" layoutY="146.0" stroke="#bcbcbc" strokeType="INSIDE" width="472.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e9ffca" height="31.0" layoutX="506.0" layoutY="146.0"
+                 stroke="#bcbcbc" strokeType="INSIDE" width="472.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#def1ff" height="31.0" layoutX="14.0" layoutY="146.0"
+                 stroke="#bcbcbc" strokeType="INSIDE" width="472.0" />
       <TableView fx:id="inputParcelsTable1" layoutX="14.0" layoutY="176.0" prefHeight="498.0" prefWidth="472.0">
         <columns>
           <TableColumn fx:id="idColumn1" prefWidth="50.0" text="№" />
@@ -30,12 +36,14 @@
             <TableColumn fx:id="tourNumberColumn2" prefWidth="113.0" text="Tour Number" />
          </columns>
       </TableView>
-      <Text id="inputText1" fx:id="inputText1" layoutX="14.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Input Parcels" textAlignment="CENTER" wrappingWidth="472.0">
+      <Text id="inputText1" fx:id="inputText1" layoutX="14.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0"
+            text="Input Parcels" textAlignment="CENTER" wrappingWidth="472.0">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text id="scannedText2" fx:id="scannedText2" layoutX="506.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scanned Parcels" textAlignment="CENTER" wrappingWidth="472.0">
+      <Text id="scannedText2" fx:id="scannedText2" layoutX="506.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0"
+            text="Scanned Parcels" textAlignment="CENTER" wrappingWidth="472.0">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -52,7 +60,20 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="clearLists" layoutX="250.0" mnemonicParsing="false" onAction="#onUploadFileBtnClicked" prefHeight="31.0" prefWidth="126.0" text="Сlear Lists" textAlignment="CENTER">
+      <Button fx:id="clearLists" layoutX="250.0" mnemonicParsing="false" onAction="#onClearListsBtnClicked"
+              prefHeight="31.0" prefWidth="126.0" text="Сlear Lists" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="logBtn" layoutX="375.0" mnemonicParsing="false" onAction="#onLogBtnClicked"
+              prefHeight="31.0" prefWidth="126.0" text="Log" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="addNewParcel" layoutX="753.0" layoutY="63.0" mnemonicParsing="false"
+              prefHeight="52.0" prefWidth="52.0" text="Add">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -62,11 +83,14 @@
             <Font size="24.0" />
          </font>
       </TextField>
-      <Button fx:id="addNewParcel" layoutX="753.0" layoutY="63.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="52.0" text="Add">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Button>
+      <ImageView fitHeight="455.0" fitWidth="425.0" layoutX="37.0" layoutY="209.0" opacity="0.015">
+         <image>
+            <Image url="@../images/background_image.png" />
+         </image></ImageView>
+      <ImageView fitHeight="455.0" fitWidth="425.0" layoutX="530.0" layoutY="209.0" opacity="0.015">
+         <image>
+            <Image url="@../images/background_image.png" />
+         </image></ImageView>
    </children>
    <opaqueInsets>
       <Insets />

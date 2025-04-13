@@ -17,6 +17,7 @@ import javafx.stage.FileChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -44,7 +45,6 @@ public class RootController {
 
     @FXML private TextField newParcelField;
     @FXML private Button addNewParcel;
-    @FXML private Button clearLists;
 
     @FXML public void initialize() {
         barcodeScanner = new BarcodeScanner(inputList, scannedList);
@@ -62,13 +62,8 @@ public class RootController {
                 if (!inputList.contains(parcel))
                     inputList.add(parcel);
                 else
-                    log.warn("Duplicate - {}", parcel);
+                    log.warn("Duplicate - {}", parcel.getTrackingNumber());
             }
-        });
-
-        clearLists.setOnAction(event -> {
-            inputList.clear();
-            scannedList.clear();
         });
 
         idColumn1.setCellValueFactory(new PropertyValueFactory<>("idParcel"));
@@ -94,11 +89,21 @@ public class RootController {
             if (file.getName().endsWith(".txt")) {
                 TXTReader txtReader = new TXTReader();
                 List<Parcel> inputParcels = txtReader.read(file.getPath());
-                inputList.addAll(inputParcels);
+                for (Parcel parcel : inputParcels) {
+                    if (!inputList.contains(parcel))
+                        inputList.add(parcel);
+                    else
+                        log.warn("Duplicate - {}", parcel.getTrackingNumber());
+                }
             } else if (file.getName().endsWith(".xlsx")) {
                 ExcelReader excelReader = new ExcelReader();
                 List<Parcel> inputParcels = excelReader.read(file.getPath());
-                inputList.addAll(inputParcels);
+                for (Parcel parcel : inputParcels) {
+                    if (!inputList.contains(parcel))
+                        inputList.add(parcel);
+                    else
+                        log.warn("Duplicate - {}", parcel.getTrackingNumber());
+                }
             }
         }
     }
@@ -110,13 +115,29 @@ public class RootController {
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+                writer.write("Tracking Number" + "    " + "Gibit Number" + "    " + "Tour Number\n");
                 for (Parcel parcel : scannedList) {
-                    writer.write(parcel.getTrackingNumber() + "    " + parcel.getGibitNumber() + "    " +
-                                        parcel.getTourNumber() + System.lineSeparator());
+                    writer.write(parcel.getTrackingNumber() + "     " + parcel.getGibitNumber() + "           " +
+                                        parcel.getTourNumber() + "\n");
                 }
             } catch (IOException e) {
                 log.error("Error saving file {}", e.getMessage());
             }
+        }
+    }
+
+    @FXML private void onClearListsBtnClicked() {
+        inputList.clear();
+        scannedList.clear();
+    }
+
+    @FXML private void onLogBtnClicked() {
+        try {
+            File logFile = new File("logs/app.log");
+            if (logFile.exists())
+                Desktop.getDesktop().open(logFile);
+        } catch (IOException e) {
+            log.error(e.getMessage());
         }
     }
 }

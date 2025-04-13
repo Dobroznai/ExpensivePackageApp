@@ -29,13 +29,13 @@ public class ExcelReader {
             Sheet sheet = workbook.getSheetAt(0);
 
             for (Row row : sheet) {
-                String trackingNumber = getCellAsString(row, 0);
+                String trackingNumber = getCellAsString(row, 0).trim();
                 if (trackingNumber.isEmpty())
                     continue;
-                String gibitNumber = getCellAsString(row, 1);
+                String gibitNumber = getCellAsString(row, 1).trim();
                 if (gibitNumber.length() != 5)
                     continue;
-                String tourNumber = getCellAsString(row, 2);
+                String tourNumber = getCellAsString(row, 2).trim();
                 if (tourNumber.length() != 3)
                     continue;
 

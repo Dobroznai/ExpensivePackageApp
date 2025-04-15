@@ -4,16 +4,20 @@ import de.vanrest.models.Parcel;
 import de.vanrest.readers.BarcodeScanner;
 import de.vanrest.readers.ExcelReader;
 import de.vanrest.readers.TXTReader;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +27,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class RootController {
 
@@ -44,20 +49,45 @@ public class RootController {
     @FXML private TableColumn<Parcel, String> tourNumberColumn2;
 
     @FXML private TextField newParcelField;
-    @FXML private Button addNewParcel;
+    @FXML private TextField scannedParcelField;
+    @FXML private Label description;
 
     @FXML public void initialize() {
         barcodeScanner = new BarcodeScanner(inputList, scannedList);
         Thread scannerThread = new Thread(barcodeScanner);
+        scannerThread.setDaemon(true);
         scannerThread.start();
 
         barcodeScanner.setListener(parcel ->
             Platform.runLater(() -> TourNumberController.show(parcel.getTourNumber())));
 
-        addNewParcel.setOnAction(event -> {
+        barcodeScanner.setRescanListener(trackingNumber -> {
+            Platform.runLater(() -> description.setText(trackingNumber + " - already scanned!"));
+            PauseTransition pause = new PauseTransition(Duration.seconds(5));
+            pause.setOnFinished(event -> description.setText(""));
+            pause.play();
+        });
+
+        scannedParcelField.setOnAction(event -> {
+            String inputLine = scannedParcelField.getText().trim();
+            Optional<Parcel> optParcel = inputList.stream()
+                    .filter(parcel -> parcel.getTrackingNumber().equalsIgnoreCase(inputLine))
+                    .findFirst();
+            if (optParcel.isPresent()) {
+                Parcel parcel = optParcel.get();
+                parcel.setTrackingNumber("🔴 " + inputLine);
+                TourNumberController.show(parcel.getTourNumber());
+                scannedList.add(parcel);
+                inputList.remove(parcel);
+            } else {
+                log.warn("Parcel not found {}", inputLine);
+            }
+        });
+
+        newParcelField.setOnAction(event -> {
             String getUserParcel = newParcelField.getText().trim();
             String[] parts = getUserParcel.split("\\s+");
-            if (parts.length == 3) {
+            if (parts.length == 3 && parts[1].length() == 5 && parts[2].length() == 3) {
                 Parcel parcel = new Parcel(parts[0], parts[1], parts[2]);
                 if (!inputList.contains(parcel))
                     inputList.add(parcel);
@@ -71,6 +101,15 @@ public class RootController {
         gibitNumberColumn1.setCellValueFactory(new PropertyValueFactory<>("gibitNumber"));
         tourNumberColumn1.setCellValueFactory(new PropertyValueFactory<>("tourNumber"));
         inputParcelsTable1.setItems(inputList);
+        inputParcelsTable1.setOnKeyPressed(event -> {
+            if (event.isControlDown() && event.getCode().toString().equals("C")) {
+                Parcel selected = inputParcelsTable1.getSelectionModel().getSelectedItem();
+                String textToCopy = selected.getTrackingNumber();
+                ClipboardContent content = new ClipboardContent();
+                content.putString(textToCopy);
+                Clipboard.getSystemClipboard().setContent(content);
+            }
+        });
 
         idColumn2.setCellValueFactory(new PropertyValueFactory<>("idParcel"));
         trackingNumberColumn2.setCellValueFactory(new PropertyValueFactory<>("trackingNumber"));

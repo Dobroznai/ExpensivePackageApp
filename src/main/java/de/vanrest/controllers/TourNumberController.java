@@ -37,7 +37,9 @@ public class TourNumberController {
 
             dialodStage = new Stage();
             dialodStage.setTitle("Tour Number");
-            dialodStage.setScene(new Scene(root));
+            Scene scene = new Scene(root, 250, 183);
+            dialodStage.setScene(scene);
+            scene.getStylesheets().add(Objects.requireNonNull(TourNumberController.class.getResource("/css/style.css")).toExternalForm());
             dialodStage.setResizable(false);
 
             Image icon = new Image(Objects.requireNonNull(TourNumberController.class.getResourceAsStream("/images/icon.png")));

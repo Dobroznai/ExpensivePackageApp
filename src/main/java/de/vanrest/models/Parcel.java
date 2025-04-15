@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Parcel {
     private static int nextId = 1;
     final int idParcel;
-    private final String trackingNumber;
+    private String trackingNumber;
     private final String gibitNumber;
     private final String tourNumber;
 
@@ -20,6 +20,8 @@ public class Parcel {
     public String getTrackingNumber() {return trackingNumber;}
     public String getGibitNumber() {return gibitNumber;}
     public String getTourNumber() {return tourNumber;}
+
+    public void setTrackingNumber(String trackingNumber) {this.trackingNumber = trackingNumber;}
 
     @Override
     public String toString() {

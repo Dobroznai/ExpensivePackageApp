@@ -1,6 +1,7 @@
 package de.vanrest.readers;
 
-import de.vanrest.utils.Listener;
+import de.vanrest.utils.RescanListener;
+import de.vanrest.utils.ScannerListener;
 import de.vanrest.models.Parcel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,8 @@ public class BarcodeScanner implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(BarcodeScanner.class);
 
-    private Listener listener;
+    private ScannerListener scannerListener;
+    private RescanListener rescanListener;
     private List<Parcel> parcels;
     private List<Parcel> scannedParcels;
 
@@ -22,7 +24,8 @@ public class BarcodeScanner implements Runnable {
         this.scannedParcels = scannedParcels;
     }
 
-    public void setListener(Listener listener) {this.listener = listener;}
+    public void setListener(ScannerListener scannerListener) {this.scannerListener = scannerListener;}
+    public void setRescanListener(RescanListener rescanListener) {this.rescanListener = rescanListener;}
 
     @Override
     public void run() {
@@ -40,12 +43,13 @@ public class BarcodeScanner implements Runnable {
         if (parcelOpt.isPresent()) {
             Parcel parcel = parcelOpt.get();
             scannedParcels.add(parcel);
-            listener.onParcelScanned(parcel);
+            scannerListener.onParcelScanned(parcel);
             log.info("The parcel scanned - {}", parcel.getTrackingNumber());
             parcels.remove(parcel);
         } else {
             Optional<Parcel> parcelOpt2 = findParcel(scannedParcels, scannedLine);
             if (parcelOpt2.isPresent()) {
+                rescanListener.onRepeatedScan(parcelOpt2.get().getTrackingNumber());
                 log.info("The parcel has already been scanned - {}", parcelOpt2.get().getTrackingNumber());
             } else {
                 log.warn("Parcel not found {}", scannedLine);

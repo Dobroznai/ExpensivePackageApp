@@ -16,15 +16,15 @@ public class BarcodeScanner implements Runnable {
 
     private ScannerListener scannerListener;
     private RescanListener rescanListener;
-    private List<Parcel> parcels;
-    private List<Parcel> scannedParcels;
+    private final List<Parcel> parcels;
+    private final List<Parcel> scannedParcels;
 
     public BarcodeScanner(List<Parcel> parcels, List<Parcel> scannedParcels) {
         this.parcels = parcels;
         this.scannedParcels = scannedParcels;
     }
 
-    public void setListener(ScannerListener scannerListener) {this.scannerListener = scannerListener;}
+    public void setScannerListener(ScannerListener scannerListener) {this.scannerListener = scannerListener;}
     public void setRescanListener(RescanListener rescanListener) {this.rescanListener = rescanListener;}
 
     @Override

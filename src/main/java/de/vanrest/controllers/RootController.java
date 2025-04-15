@@ -58,7 +58,12 @@ public class RootController {
         scannerThread.setDaemon(true);
         scannerThread.start();
 
-        barcodeScanner.setListener(parcel ->
+        setupTables();
+        setupCopyTrackingNumberHandler();
+        setupScannedParcelHandler();
+        setupParcelAddingHandler();
+
+        barcodeScanner.setScannerListener(parcel ->
             Platform.runLater(() -> TourNumberController.show(parcel.getTourNumber())));
 
         barcodeScanner.setRescanListener(trackingNumber -> {
@@ -67,7 +72,9 @@ public class RootController {
             pause.setOnFinished(event -> description.setText(""));
             pause.play();
         });
+    }
 
+    private void setupScannedParcelHandler() {
         scannedParcelField.setOnAction(event -> {
             String inputLine = scannedParcelField.getText().trim();
             Optional<Parcel> optParcel = inputList.stream()
@@ -83,7 +90,9 @@ public class RootController {
                 log.warn("Parcel not found {}", inputLine);
             }
         });
+    }
 
+    private void setupParcelAddingHandler() {
         newParcelField.setOnAction(event -> {
             String getUserParcel = newParcelField.getText().trim();
             String[] parts = getUserParcel.split("\\s+");
@@ -95,12 +104,23 @@ public class RootController {
                     log.warn("Duplicate - {}", parcel.getTrackingNumber());
             }
         });
+    }
 
+    private void setupTables() {
         idColumn1.setCellValueFactory(new PropertyValueFactory<>("idParcel"));
         trackingNumberColumn1.setCellValueFactory(new PropertyValueFactory<>("trackingNumber"));
         gibitNumberColumn1.setCellValueFactory(new PropertyValueFactory<>("gibitNumber"));
         tourNumberColumn1.setCellValueFactory(new PropertyValueFactory<>("tourNumber"));
         inputParcelsTable1.setItems(inputList);
+
+        idColumn2.setCellValueFactory(new PropertyValueFactory<>("idParcel"));
+        trackingNumberColumn2.setCellValueFactory(new PropertyValueFactory<>("trackingNumber"));
+        gibitNumberColumn2.setCellValueFactory(new PropertyValueFactory<>("gibitNumber"));
+        tourNumberColumn2.setCellValueFactory(new PropertyValueFactory<>("tourNumber"));
+        scannedParcelsTable2.setItems(scannedList);
+    }
+
+    private void setupCopyTrackingNumberHandler() {
         inputParcelsTable1.setOnKeyPressed(event -> {
             if (event.isControlDown() && event.getCode().toString().equals("C")) {
                 Parcel selected = inputParcelsTable1.getSelectionModel().getSelectedItem();
@@ -110,12 +130,6 @@ public class RootController {
                 Clipboard.getSystemClipboard().setContent(content);
             }
         });
-
-        idColumn2.setCellValueFactory(new PropertyValueFactory<>("idParcel"));
-        trackingNumberColumn2.setCellValueFactory(new PropertyValueFactory<>("trackingNumber"));
-        gibitNumberColumn2.setCellValueFactory(new PropertyValueFactory<>("gibitNumber"));
-        tourNumberColumn2.setCellValueFactory(new PropertyValueFactory<>("tourNumber"));
-        scannedParcelsTable2.setItems(scannedList);
     }
 
     @FXML private void onUploadFileBtnClicked() {

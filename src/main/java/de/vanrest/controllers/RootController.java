@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -118,6 +119,73 @@ public class RootController {
         gibitNumberColumn2.setCellValueFactory(new PropertyValueFactory<>("gibitNumber"));
         tourNumberColumn2.setCellValueFactory(new PropertyValueFactory<>("tourNumber"));
         scannedParcelsTable2.setItems(scannedList);
+
+        inputParcelsTable1.getSelectionModel().setCellSelectionEnabled(true);
+        inputParcelsTable1.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
+
+        scannedParcelsTable2.getSelectionModel().setCellSelectionEnabled(true);
+        scannedParcelsTable2.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
+
+        inputParcelsTable1.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                copySelectedCellToClipboard(inputParcelsTable1);
+            }
+        });
+
+        scannedParcelsTable2.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                copySelectedCellToClipboard(scannedParcelsTable2);
+            }
+        });
+
+        inputParcelsTable1.setOnKeyPressed(event -> {
+            if (event.isControlDown() && event.getCode().toString().equals("C")) {
+                copySelectionToClipboard(inputParcelsTable1);
+            }
+        });
+
+        scannedParcelsTable2.setOnKeyPressed(event -> {
+            if (event.isControlDown() && event.getCode().toString().equals("C")) {
+                copySelectionToClipboard(scannedParcelsTable2);
+            }
+        });
+    }
+
+    private void copySelectedCellToClipboard(TableView<?> table) {
+        TablePosition<?, ?> position = table.getSelectionModel().getSelectedCells().get(0);
+        Object cell = table.getVisibleLeafColumn(position.getColumn()).getCellData(position.getRow());
+
+        if (cell != null) {
+            ClipboardContent content = new ClipboardContent();
+            content.putString(cell.toString());
+            Clipboard.getSystemClipboard().setContent(content);
+        }
+    }
+
+    private void copySelectionToClipboard(TableView<?> table) {
+        StringBuilder clipboardString = new StringBuilder();
+        ObservableList<TablePosition> positionList = table.getSelectionModel().getSelectedCells();
+        int prevRow = -1;
+
+        for (TablePosition position : positionList) {
+            int row = position.getRow();
+            Object cell = table.getVisibleLeafColumn(position.getColumn()).getCellData(row);
+
+            if (cell == null)
+                cell = "";
+
+            if (prevRow == row)
+                clipboardString.append('\t');
+            else if (prevRow != -1)
+                clipboardString.append('\n');
+
+            clipboardString.append(cell);
+            prevRow = row;
+        }
+
+        final ClipboardContent clipboardContent = new ClipboardContent();
+        clipboardContent.putString(clipboardString.toString());
+        Clipboard.getSystemClipboard().setContent(clipboardContent);
     }
 
     private void setupCopyTrackingNumberHandler() {

@@ -8,9 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
-public class BarcodeScanner implements Runnable {
+public class BarcodeScanner {
 
     private static final Logger log = LoggerFactory.getLogger(BarcodeScanner.class);
 
@@ -27,18 +26,7 @@ public class BarcodeScanner implements Runnable {
     public void setScannerListener(ScannerListener scannerListener) {this.scannerListener = scannerListener;}
     public void setRescanListener(RescanListener rescanListener) {this.rescanListener = rescanListener;}
 
-    @Override
-    public void run() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            if (scanner.hasNextLine()) {
-                String scannedLine = scanner.nextLine().trim();
-                addParcel(scannedLine);
-            }
-        }
-    }
-
-    private void addParcel(String scannedLine) {
+    public void addParcel(String scannedLine) {
         Optional<Parcel> parcelOpt = findParcel(parcels, scannedLine);
         if (parcelOpt.isPresent()) {
             Parcel parcel = parcelOpt.get();
@@ -49,7 +37,7 @@ public class BarcodeScanner implements Runnable {
         } else {
             Optional<Parcel> parcelOpt2 = findParcel(scannedParcels, scannedLine);
             if (parcelOpt2.isPresent()) {
-                rescanListener.onRepeatedScan(parcelOpt2.get().getTrackingNumber());
+                rescanListener.onRepeatedScan(parcelOpt2.get());
                 log.info("The parcel has already been scanned - {}", parcelOpt2.get().getTrackingNumber());
             } else {
                 log.warn("Parcel not found {}", scannedLine);

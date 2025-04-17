@@ -9,10 +9,8 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.Clipboard;
@@ -52,26 +50,33 @@ public class RootController {
     @FXML private TextField newParcelField;
     @FXML private TextField scannedParcelField;
     @FXML private Label description;
+    @FXML private TextField scannerInputField;
+    @FXML private ToggleButton scanToggleButton;
 
     @FXML public void initialize() {
         barcodeScanner = new BarcodeScanner(inputList, scannedList);
-        Thread scannerThread = new Thread(barcodeScanner);
-        scannerThread.setDaemon(true);
-        scannerThread.start();
 
         setupTables();
-        setupCopyTrackingNumberHandler();
         setupScannedParcelHandler();
         setupParcelAddingHandler();
 
         barcodeScanner.setScannerListener(parcel ->
             Platform.runLater(() -> TourNumberController.show(parcel.getTourNumber())));
 
-        barcodeScanner.setRescanListener(trackingNumber -> {
-            Platform.runLater(() -> description.setText(trackingNumber + " - already scanned!"));
+        barcodeScanner.setRescanListener(parcel -> {
+            Platform.runLater(() -> description.setText(parcel.getTrackingNumber() + " - already scanned!"));
             PauseTransition pause = new PauseTransition(Duration.seconds(5));
             pause.setOnFinished(event -> description.setText(""));
             pause.play();
+        });
+
+        scannerInputField.setManaged(false); // Не займає місця в макеті
+        scannerInputField.setOnAction(event -> {
+            String scannedLine = scannerInputField.getText().trim();
+            if (!scannedLine.isEmpty()) {
+                barcodeScanner.addParcel(scannedLine);
+                scannerInputField.clear();
+            }
         });
     }
 
@@ -120,6 +125,10 @@ public class RootController {
         tourNumberColumn2.setCellValueFactory(new PropertyValueFactory<>("tourNumber"));
         scannedParcelsTable2.setItems(scannedList);
 
+        setupCopyHandler();
+    }
+
+    private void setupCopyHandler() {
         inputParcelsTable1.getSelectionModel().setCellSelectionEnabled(true);
         inputParcelsTable1.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
 
@@ -186,18 +195,6 @@ public class RootController {
         final ClipboardContent clipboardContent = new ClipboardContent();
         clipboardContent.putString(clipboardString.toString());
         Clipboard.getSystemClipboard().setContent(clipboardContent);
-    }
-
-    private void setupCopyTrackingNumberHandler() {
-        inputParcelsTable1.setOnKeyPressed(event -> {
-            if (event.isControlDown() && event.getCode().toString().equals("C")) {
-                Parcel selected = inputParcelsTable1.getSelectionModel().getSelectedItem();
-                String textToCopy = selected.getTrackingNumber();
-                ClipboardContent content = new ClipboardContent();
-                content.putString(textToCopy);
-                Clipboard.getSystemClipboard().setContent(content);
-            }
-        });
     }
 
     @FXML private void onUploadFileBtnClicked() {

@@ -1,5 +1,7 @@
 package de.vanrest.utils;
 
+import de.vanrest.models.Parcel;
+
 public interface RescanListener {
-    void onRepeatedScan(String trackingNumber);
+    void onRepeatedScan(Parcel parcel);
 }

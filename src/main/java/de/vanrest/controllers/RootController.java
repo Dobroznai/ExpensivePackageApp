@@ -81,11 +81,8 @@ public class RootController {
                     barcodeScanner.addParcel(scannedCode);
                     scanBuffer.setLength(0);
                 }
-            } else {
-                if (!event.isControlDown() && !event.isAltDown()) {
-                    scanBuffer.append(event.getText());
-                }
-            }
+            } else
+                scanBuffer.append(event.getText());
         });
     }
 

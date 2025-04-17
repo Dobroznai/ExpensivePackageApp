@@ -95,6 +95,7 @@ public class RootController {
             } else {
                 log.warn("Parcel not found {}", inputLine);
             }
+            scannedParcelField.clear();
         });
     }
 
@@ -108,6 +109,7 @@ public class RootController {
                     inputList.add(parcel);
                 else
                     log.warn("Duplicate - {}", parcel.getTrackingNumber());
+                newParcelField.clear();
             }
         });
     }

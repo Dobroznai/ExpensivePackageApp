@@ -9,12 +9,15 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import org.slf4j.Logger;
@@ -33,7 +36,8 @@ public class RootController {
     private static final Logger log = LoggerFactory.getLogger(RootController.class);
     private final ObservableList<Parcel> inputList = FXCollections.observableArrayList();
     private final ObservableList<Parcel> scannedList = FXCollections.observableArrayList();
-    BarcodeScanner barcodeScanner;
+    private static BarcodeScanner barcodeScanner;
+    private static final StringBuilder scanBuffer = new StringBuilder();
 
     @FXML private TableView<Parcel> inputParcelsTable1;
     @FXML private TableColumn<Parcel, Integer> idColumn1;
@@ -50,8 +54,6 @@ public class RootController {
     @FXML private TextField newParcelField;
     @FXML private TextField scannedParcelField;
     @FXML private Label description;
-    @FXML private TextField scannerInputField;
-    @FXML private ToggleButton scanToggleButton;
 
     @FXML public void initialize() {
         barcodeScanner = new BarcodeScanner(inputList, scannedList);
@@ -61,7 +63,7 @@ public class RootController {
         setupParcelAddingHandler();
 
         barcodeScanner.setScannerListener(parcel ->
-            Platform.runLater(() -> TourNumberController.show(parcel.getTourNumber())));
+                Platform.runLater(() -> TourNumberController.show(parcel.getTourNumber())));
 
         barcodeScanner.setRescanListener(parcel -> {
             Platform.runLater(() -> description.setText(parcel.getTrackingNumber() + " - already scanned!"));
@@ -69,13 +71,20 @@ public class RootController {
             pause.setOnFinished(event -> description.setText(""));
             pause.play();
         });
+    }
 
-        scannerInputField.setManaged(false); // Не займає місця в макеті
-        scannerInputField.setOnAction(event -> {
-            String scannedLine = scannerInputField.getText().trim();
-            if (!scannedLine.isEmpty()) {
-                barcodeScanner.addParcel(scannedLine);
-                scannerInputField.clear();
+    public static void setupScannerHandler(Scene scene) {
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String scannedCode = scanBuffer.toString().trim();
+                if (!scannedCode.isEmpty()) {
+                    barcodeScanner.addParcel(scannedCode);
+                    scanBuffer.setLength(0);
+                }
+            } else {
+                if (!event.isControlDown() && !event.isAltDown()) {
+                    scanBuffer.append(event.getText());
+                }
             }
         });
     }
@@ -234,11 +243,11 @@ public class RootController {
         fileChooser.setInitialFileName("scanned_parcels.txt");
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
                 writer.write("Tracking Number" + "    " + "Gibit Number" + "    " + "Tour Number\n");
                 for (Parcel parcel : scannedList) {
                     writer.write(parcel.getTrackingNumber() + "     " + parcel.getGibitNumber() + "           " +
-                                        parcel.getTourNumber() + "\n");
+                            parcel.getTourNumber() + "\n");
                 }
             } catch (IOException e) {
                 log.error("Error saving file {}", e.getMessage());

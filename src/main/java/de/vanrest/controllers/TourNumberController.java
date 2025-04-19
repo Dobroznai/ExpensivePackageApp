@@ -51,6 +51,7 @@ public class TourNumberController {
             });
 
             dialodStage.show();
+            RootController.setupScannerHandler(scene);
 
         } catch (IOException e) {
             log.error("Error displaying window for showing tour number");

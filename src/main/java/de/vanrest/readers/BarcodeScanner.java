@@ -1,7 +1,7 @@
 package de.vanrest.readers;
 
+import de.vanrest.controllers.TourNumberController;
 import de.vanrest.utils.RescanListener;
-import de.vanrest.utils.ScannerListener;
 import de.vanrest.models.Parcel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +12,6 @@ import java.util.Optional;
 public class BarcodeScanner {
 
     private static final Logger log = LoggerFactory.getLogger(BarcodeScanner.class);
-
-    private ScannerListener scannerListener;
     private RescanListener rescanListener;
     private final List<Parcel> parcels;
     private final List<Parcel> scannedParcels;
@@ -23,7 +21,6 @@ public class BarcodeScanner {
         this.scannedParcels = scannedParcels;
     }
 
-    public void setScannerListener(ScannerListener scannerListener) {this.scannerListener = scannerListener;}
     public void setRescanListener(RescanListener rescanListener) {this.rescanListener = rescanListener;}
 
     public void addParcel(String scannedLine) {
@@ -31,7 +28,7 @@ public class BarcodeScanner {
         if (parcelOpt.isPresent()) {
             Parcel parcel = parcelOpt.get();
             scannedParcels.add(parcel);
-            scannerListener.onParcelScanned(parcel);
+            TourNumberController.show(parcel.getTourNumber());
             log.info("The parcel scanned - {}", parcel.getTrackingNumber());
             parcels.remove(parcel);
         } else {

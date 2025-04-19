@@ -37,7 +37,7 @@ public class RootController {
     private final ObservableList<Parcel> inputList = FXCollections.observableArrayList();
     private final ObservableList<Parcel> scannedList = FXCollections.observableArrayList();
     private static BarcodeScanner barcodeScanner;
-    private static final StringBuilder scanBuffer = new StringBuilder();
+    private static final StringBuilder builder = new StringBuilder();
 
     @FXML private TableView<Parcel> inputParcelsTable1;
     @FXML private TableColumn<Parcel, Integer> idColumn1;
@@ -62,9 +62,6 @@ public class RootController {
         setupScannedParcelHandler();
         setupParcelAddingHandler();
 
-        barcodeScanner.setScannerListener(parcel ->
-                Platform.runLater(() -> TourNumberController.show(parcel.getTourNumber())));
-
         barcodeScanner.setRescanListener(parcel -> {
             Platform.runLater(() -> description.setText(parcel.getTrackingNumber() + " - already scanned!"));
             PauseTransition pause = new PauseTransition(Duration.seconds(5));
@@ -76,13 +73,13 @@ public class RootController {
     public static void setupScannerHandler(Scene scene) {
         scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                String scannedCode = scanBuffer.toString().trim();
+                String scannedCode = builder.toString().trim().toLowerCase();
                 if (!scannedCode.isEmpty()) {
                     barcodeScanner.addParcel(scannedCode);
-                    scanBuffer.setLength(0);
+                    builder.setLength(0);
                 }
             } else
-                scanBuffer.append(event.getText());
+                builder.append(event.getText());
         });
     }
 
